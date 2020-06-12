@@ -122,7 +122,7 @@ Resources:
           - Name: S3_BUCKET
             Type: PLAINTEXT
             Value:
-              Fn::Sub: ${BucketRoot}
+              Fn::Sub: ${SiteBucket}
           - Name: SAM_STACK_NAME
             Type: PLAINTEXT
             Value:
