@@ -101,7 +101,7 @@ Resources:
             Action: "*"
             Resource: "*"
           Version: '2012-10-17'
-  CodeBuildCloudProviders:
+  CodeBuildCommands:
     Type: AWS::CodeBuild::Project
     DependsOn: CodeBuildRole
     Properties:
@@ -170,7 +170,7 @@ Resources:
         Actions:
         - InputArtifacts:
           - Name: SourceArtifacts
-          Name: TestCloudProvidersAPI
+          Name: RunCommands
           ActionTypeId:
             Category: Test
             Owner: AWS
@@ -179,7 +179,7 @@ Resources:
           OutputArtifacts: []
           Configuration:
             ProjectName:
-              Ref: CodeBuildCloudProviders
+              Ref: CodeBuildCommands
           RunOrder: 1
     
       ArtifactStore:

@@ -2,13 +2,12 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10
+      python: 3.7
     commands:
-      - node --version
+      - python --version
   build:
     commands:
-      - npm install
-      - npm install aws-cli-js
+      - pip install --user aws-sam-cli
 artifacts:
   files:
     - '**/*'
