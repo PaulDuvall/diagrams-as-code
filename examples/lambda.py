@@ -28,8 +28,7 @@ with Diagram("Serverless Web Apps", show=False):
                         
     with Cluster("SAM"):
         sam = [APIGateway("GetData"),
-                    Lambda("GetData"),
-                    DynamodbTable("CloudProviders")]
-        
+               Lambda("GetData"),
+               DynamodbTable("CloudProviders")]
 
     cloudformation >> codepipeline >> sam
