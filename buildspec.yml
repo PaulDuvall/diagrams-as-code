@@ -17,7 +17,9 @@ phases:
       - pip install poetry
       - yum -y install graphviz
       - python examples/cluster.py
-      - aws s3 cp --recursive --acl public-read *.png s3://$S3_BUCKET
+      - mkdir diagrams
+      - mv **/*.png diagrams
+      - aws s3 cp --recursive --acl public-read ./diagrams s3://$S3_BUCKET
 artifacts:
   files:
     - '**/*'
