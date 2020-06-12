@@ -6,7 +6,7 @@ AWS_REGION=$(curl -s http://169.254.169.254/latest/meta-data/placement/availabil
 
 MYNAME=${1:-pmd}
 PROJECTNAME=${2:-diagrams}
-TMPDIR=${3:-.tmp-gitrepo}   
+TMPDIR=${3:-tmp-gitrepo}   
 S3BUCKET=${4:-$PROJECTNAME-$MYNAME}
 SAMSTACK=${5:-$PROJECTNAME-$MYNAME-$AWS_REGION}
 CFNSTACK=${6:-$PROJECTNAME-$MYNAME}
