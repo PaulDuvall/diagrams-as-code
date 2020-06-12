@@ -16,6 +16,7 @@ phases:
       - pipenv install diagrams
       - pip install poetry
       - yum -y install graphviz
+      - python cluster.py
 artifacts:
   files:
     - '**/*'
