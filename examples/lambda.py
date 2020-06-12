@@ -6,11 +6,11 @@ from diagrams.aws.network import APIGateway
 
 with Diagram("Running Lambda", show=False):
     dns = Route53("dns")
+    LambdaGetData = Lambda("GetData")
 
     with Cluster("Event Flows"):
         with Cluster("Processing"):
-            mylambda = [Lambda("GetData"),
-                        Lambda("TestData"),
+            mylambda = [Lambda("TestData"),
                         Lambda("proc3")]
                         
     with Cluster("Storage"):
@@ -20,4 +20,4 @@ with Diagram("Running Lambda", show=False):
         
     api = APIGateway("GetData") 
 
-    mylambda >> api
+    LambdaGetData >> api
