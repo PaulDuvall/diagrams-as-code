@@ -18,7 +18,7 @@ phases:
       - yum -y install graphviz
       - python examples/cluster.py
       - mkdir diagrams
-      - mv **/*.png diagrams
+      - mv ./*.png diagrams
       - aws s3 cp --recursive --acl public-read ./diagrams s3://$S3_BUCKET
 artifacts:
   files:
