@@ -28,9 +28,11 @@ with Diagram("Serverless Web Apps", show=False):
         cloudformation - [S3("Storage")]
 
     with Cluster("CodePipeline"):
-        codepipeline = Cloudformation("Deploy")
+        codepipeline = Codepipeline("Pipeline")
         codepipeline - [Codecommit("Source")]
         codepipeline - [Codebuild("Build")]  
+        codepipeline - Cloudformation("Deploy")
+
         cloudformation >> codepipeline
       
     with Cluster("Serverless Application Model"):
