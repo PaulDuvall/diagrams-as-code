@@ -22,6 +22,8 @@ aws s3api list-buckets --query 'Buckets[?starts_with(Name, `'$S3BUCKET'`) == `tr
 
 sleep 20
 
+aws s3 mb s3://$S3BUCKET-$(aws sts get-caller-identity --output text --query 'Account')
+
 aws cloudformation delete-stack --stack-name $CFNSTACK
 
 aws cloudformation wait stack-delete-complete --stack-name $CFNSTACK
