@@ -16,7 +16,6 @@ phases:
       - pipenv install diagrams
       - pip install poetry
       - yum -y install graphviz
-      - poetry add diagrams
 artifacts:
   files:
     - '**/*'
