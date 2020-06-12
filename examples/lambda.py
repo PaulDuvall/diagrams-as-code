@@ -12,20 +12,29 @@ from diagrams.aws.devtools import Codedeploy
 from diagrams.aws.devtools import Codepipeline
 from diagrams.aws.management import Cloudformation
 from diagrams.aws.devtools import CommandLineInterface
+from diagrams.aws.compute import ECS
+from diagrams.aws.database import ElastiCache, RDS
+from diagrams.aws.network import ELB
+from diagrams.aws.network import Route53
 
 with Diagram("Serverless Web Apps", show=False):
     
-    cli = CommandLineInterface("CLI")
 
     with Cluster("CloudFormation"):
-        cloudformation = [S3("Pipeline"),
-                          IdentityAndAccessManagementIam("Permissions"),
-                          Codecommit("Source")]
+        cloudformation = [S3("Storage"),
+                     IdentityAndAccessManagementIam("Permissions"),
+                     Codecommit("Source"),
+                     Codebuild("Build"),
+                     Codepipeline("Pipeline")]
 
     with Cluster("CodePipeline"):
-        codepipeline = [Codecommit("Source"),
-                        Codebuild("BuildSAM"),
-                        Cloudformation("DeployLambda")]
-                        
+        codepipeline = Codecommit("Source")
+        codepipeline - [Codebuild("Build")]                
+        cloudformation >> codepipeline
+      
+    with Cluster("Serverless Application Model"):
+        sam = APIGateway("GetData")
+        sam - [Lambda("GetData")] 
+        sam - [DynamodbTable("CloudProviders")] 
 
-    cli >> cloudformation >> codepipeline
+        codepipeline >> sam
