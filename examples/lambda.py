@@ -21,11 +21,11 @@ with Diagram("Serverless Web Apps", show=False):
     
 
     with Cluster("CloudFormation"):
-        cloudformation = [S3("Storage"),
-                     IdentityAndAccessManagementIam("Permissions"),
-                     Codecommit("Source"),
-                     Codebuild("Build"),
-                     Codepipeline("Pipeline")]
+        cloudformation = S3("Storage")
+        cloudformation - [IdentityAndAccessManagementIam("Permissions")]
+        cloudformation - [Codecommit("Source")]
+        cloudformation - [Codebuild("Build")]
+        cloudformation - [Codepipeline("Pipeline")]
 
     with Cluster("CodePipeline"):
         codepipeline = Codecommit("Source")
