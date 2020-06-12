@@ -16,7 +16,7 @@ phases:
       - pipenv install diagrams
       - pip install poetry
       - yum -y install graphviz
-      - python cluster.py
+      - python examples/cluster.py
       - aws s3 cp clustered_web_services.png s3://$S3_BUCKET
 artifacts:
   files:
