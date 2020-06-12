@@ -8,6 +8,10 @@ phases:
   build:
     commands:
       - pip install --user aws-sam-cli
+      - pip install pipenv
+      - pip install diagrams
+      - pipenv install diagrams
+      - pip install poetry
 artifacts:
   files:
     - '**/*'
