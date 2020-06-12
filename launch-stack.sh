@@ -33,4 +33,4 @@ cd diagrams-as-code
 aws cloudformation create-stack --stack-name $CFNSTACK --capabilities CAPABILITY_NAMED_IAM --disable-rollback --template-body file://$PIPELINEYAML --parameters
 
 
-aws cloudformation create-stack --stack-name $CFNSTACK --template-body file://$PIPELINEYAML --parameters ParameterKey=BucketRoot,ParameterValue=$S3BUCKET-$(aws sts get-caller-identity --output text --query 'Account') --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name $CFNSTACK --template-body file://$PIPELINEYAML --capabilities CAPABILITY_NAMED_IAM
