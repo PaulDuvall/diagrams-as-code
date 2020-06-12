@@ -141,6 +141,13 @@ Resources:
       Tags:
       - Key: Owner
         Value: MyCodeBuildProject
+  SiteBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
   PipelineBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
@@ -181,7 +188,6 @@ Resources:
             ProjectName:
               Ref: CodeBuildCommands
           RunOrder: 1
-    
       ArtifactStore:
         Type: S3
         Location: !Ref PipelineBucket
@@ -189,3 +195,6 @@ Outputs:
   PipelineUrl:
     Value: !Sub https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${Pipeline}
     Description: CodePipeline URL
+  LambdaUrl:
+    Value: !Sub https://${SiteBucket}.s3.amazonaws.com/serverless_web_apps.png
+    Description: Diagram for Serverless Web Apps
