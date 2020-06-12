@@ -1,0 +1,191 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Simple CodePipeline example with GitHub and Approval
+Parameters:
+  GitHubUser:
+    Type: String
+    Description: GitHub User
+    Default: "PaulDuvall"
+  GitHubRepo:
+    Type: String
+    Description: GitHub Repo to pull from. Only the Name. not the URL
+    Default: "diagrams-as-code"
+  GitHubBranch:
+    Type: String
+    Description: GitHub Branch
+    Default: "master"
+  BucketRoot:
+    Type: String
+    Description: bucket containing project artifacts e.g. postman config files, etc.
+    MinLength: 1
+    MaxLength: 100
+  GitHubToken:
+    NoEcho: true
+    Type: String
+    Default: '{{resolve:secretsmanager:github/personal-access-token:SecretString}}'
+    Description: Secret. It might look something like 9b189a1654643522561f7b3ebd44a1531a4287af OAuthToken with access to Repo. Go to https://github.com/settings/tokens
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: "GitHub Configuration"
+        Parameters:
+          - GitHubToken
+          - GitHubUser
+          - GitHubRepo
+          - GitHubBranch
+    ParameterLabels:
+      GitHubToken:
+        default: GitHub OAuth2 Token
+      GitHubUser: 
+        default: GitHub User/Org Name
+      GitHubRepo: 
+        default: GitHub Repository Name
+      GitHubBranch: 
+        default: GitHub Branch Name
+Resources:
+  CodePipelineRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codepipeline.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: codepipeline-service
+        PolicyDocument:
+          Statement:
+          - Action:
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketVersioning
+            Resource: "*"
+            Effect: Allow
+          - Action:
+            - s3:PutObject
+            Resource:
+            - arn:aws:s3:::codepipeline*
+            Effect: Allow
+          - Action:
+            - codebuild:*
+            - s3:GetObject
+            - s3:GetObjectVersion
+            - s3:GetBucketVersioning
+            - s3:PutObject
+            - iam:PassRole
+            Resource: "*"
+            Effect: Allow
+          Version: '2012-10-17'
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - codebuild.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: codebuild-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action: "*"
+            Resource: "*"
+          Version: '2012-10-17'
+  CodeBuildCloudProviders:
+    Type: AWS::CodeBuild::Project
+    DependsOn: CodeBuildRole
+    Properties:
+      Name:
+        Ref: AWS::StackName
+      Description: Build application
+      ServiceRole:
+        Fn::GetAtt:
+        - CodeBuildRole
+        - Arn
+      Artifacts:
+        Type: no_artifacts
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/amazonlinux2-x86_64-standard:1.0"
+        EnvironmentVariables:
+          - Name: S3_BUCKET
+            Type: PLAINTEXT
+            Value:
+              Fn::Sub: ${BucketRoot}
+          - Name: SAM_STACK_NAME
+            Type: PLAINTEXT
+            Value:
+              Fn::Sub: ${AWS::StackName}-${AWS::Region}
+      Source:
+        BuildSpec: buildspec.yml
+        Location:
+          Fn::Join:
+          - ''
+          - - https://git-codecommit.
+            - Ref: AWS::Region
+            - ".amazonaws.com/v1/repos/"
+            - Ref: AWS::StackName
+        Type: CODECOMMIT
+      TimeoutInMinutes: 10
+      Tags:
+      - Key: Owner
+        Value: MyCodeBuildProject
+  PipelineBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+  Pipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      RoleArn: !GetAtt CodePipelineRole.Arn
+      Stages:
+      - Name: Source
+        Actions:
+        - InputArtifacts: []
+          Name: Source
+          ActionTypeId:
+            Category: Source
+            Owner: ThirdParty
+            Version: '1'
+            Provider: GitHub
+          OutputArtifacts:
+          - Name: SourceArtifacts
+          Configuration:
+            Owner: !Ref GitHubUser
+            Repo: !Ref GitHubRepo
+            Branch: !Ref GitHubBranch
+            OAuthToken: !Ref GitHubToken
+          RunOrder: 1
+      - Name: Build
+        Actions:
+        - InputArtifacts:
+          - Name: SourceArtifacts
+          Name: TestCloudProvidersAPI
+          ActionTypeId:
+            Category: Test
+            Owner: AWS
+            Version: '1'
+            Provider: CodeBuild
+          OutputArtifacts: []
+          Configuration:
+            ProjectName:
+              Ref: CodeBuildCloudProviders
+          RunOrder: 1
+    
+      ArtifactStore:
+        Type: S3
+        Location: !Ref PipelineBucket
+Outputs:
+  PipelineUrl:
+    Value: !Sub https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${Pipeline}
+    Description: CodePipeline URL
