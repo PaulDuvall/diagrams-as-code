@@ -12,6 +12,11 @@ with Diagram("Running Lambda", show=False):
             handlers = [Lambda("GetData"),
                         Lambda("TestData"),
                         Lambda("proc3")]
+                        
+    with Cluster("Storage"):
+        handlers = [S3("Pipeline"),
+                    S3("Artifacts"),
+                    S3("Storage1")]
         
     store = S3("events store") 
     tbd = APIGateway("GetData") 
