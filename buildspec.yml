@@ -9,7 +9,7 @@ phases:
     commands:
       - curl -O https://bootstrap.pypa.io/get-pip.py
       - python3 get-pip.py --user
-      - sudo pip install --upgrade pip
+      - pip install --upgrade pip
       - pip install --user aws-sam-cli
       - pip install pipenv
       - pip install diagrams
