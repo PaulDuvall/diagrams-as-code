@@ -4,18 +4,30 @@ from diagrams.aws.compute import Lambda
 from diagrams.aws.storage import S3
 from diagrams.aws.network import Route53
 from diagrams.aws.network import APIGateway
-from diagrams.aws.database import DynamodbTable 
+from diagrams.aws.database import DynamodbTable
+from diagrams.aws.security import IdentityAndAccessManagementIam
+from diagrams.aws.devtools import Codebuild
+from diagrams.aws.devtools import Codecommit
+from diagrams.aws.devtools import Codedeploy
+from diagrams.aws.devtools import Codepipeline
+from diagrams.aws.management import Cloudformation
 
-with Diagram("Running Lambda", show=False):
-    LambdaGetData = Lambda("GetData")
-    myDynamodbTable = DynamodbTable("CloudProviders")
+with Diagram(show=False):
 
+    with Cluster("CloudFormation"):
+        cloudformation = [S3("Pipeline"),
+                          Codecommit("Source"),
+                          S3("Storage")]
+
+    with Cluster("CodePipeline"):
+        codepipeline = [Codecommit("Source"),
+                          Codebuild("BuildSAM"),
+                          Cloudformation("DeployLambda")]
                         
-    with Cluster("Storage"):
-        s3 = [S3("Pipeline"),
-                    S3("Artifacts"),
-                    S3("Storage1")]
+    with Cluster("SAM"):
+        sam = [APIGateway("GetData"),
+                    Lambda("GetData"),
+                    DynamodbTable("CloudProviders")]
         
-    api = APIGateway("GetData") 
 
-    api >> LambdaGetData >> myDynamodbTable
+    cloudformation >> codepipeline >> sam
