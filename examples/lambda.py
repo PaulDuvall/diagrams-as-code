@@ -12,17 +12,19 @@ from diagrams.aws.devtools import Codedeploy
 from diagrams.aws.devtools import Codepipeline
 from diagrams.aws.management import Cloudformation
 
-with Diagram(show=False):
+with Diagram("Serverless Web Apps", show=False):
 
     with Cluster("CloudFormation"):
         cloudformation = [S3("Pipeline"),
+                          IdentityAndAccessManagementIam("Permissions"),
                           Codecommit("Source"),
-                          S3("Storage")]
+                          Codebuild("BuildResources"),
+                          Codepipeline("Pipeline")]
 
     with Cluster("CodePipeline"):
         codepipeline = [Codecommit("Source"),
-                          Codebuild("BuildSAM"),
-                          Cloudformation("DeployLambda")]
+                        Codebuild("BuildSAM"),
+                        Cloudformation("DeployLambda")]
                         
     with Cluster("SAM"):
         sam = [APIGateway("GetData"),
