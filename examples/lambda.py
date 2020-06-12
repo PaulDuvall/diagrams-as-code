@@ -11,15 +11,16 @@ from diagrams.aws.devtools import Codecommit
 from diagrams.aws.devtools import Codedeploy
 from diagrams.aws.devtools import Codepipeline
 from diagrams.aws.management import Cloudformation
+from diagrams.aws.devtools import CommandLineInterface
 
 with Diagram("Serverless Web Apps", show=False):
+    
+    cli = CommandLineInterface("CLI")
 
     with Cluster("CloudFormation"):
         cloudformation = [S3("Pipeline"),
                           IdentityAndAccessManagementIam("Permissions"),
-                          Codecommit("Source"),
-                          Codebuild("BuildResources"),
-                          Codepipeline("Pipeline")]
+                          Codecommit("Source")]
 
     with Cluster("CodePipeline"):
         codepipeline = [Codecommit("Source"),
@@ -27,4 +28,4 @@ with Diagram("Serverless Web Apps", show=False):
                         Cloudformation("DeployLambda")]
                         
 
-    cloudformation >> codepipeline
+    cli >> cloudformation >> codepipeline
