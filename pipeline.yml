@@ -108,7 +108,7 @@ Resources:
         - CodeBuildRole
         - Arn
       Artifacts:
-        Type: no_artifacts
+        Type: NO_ARTIFACTS
       Environment:
         Type: LINUX_CONTAINER
         ComputeType: BUILD_GENERAL1_SMALL
@@ -124,13 +124,7 @@ Resources:
               Fn::Sub: ${AWS::StackName}-${AWS::Region}
       Source:
         BuildSpec: buildspec.yml
-        Location:
-          Fn::Join:
-          - ''
-          - - https://git-codecommit.
-            - Ref: AWS::Region
-            - ".amazonaws.com/v1/repos/"
-            - Ref: AWS::StackName
+        Location: !Sub https://git-codecommit.${AWS::Region}.amazonaws.com/v1/repos/${AWS::Region}
         Type: CODECOMMIT
       TimeoutInMinutes: 10
       Tags:
