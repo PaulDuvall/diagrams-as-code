@@ -22,15 +22,15 @@ with Diagram("Serverless Web Apps", show=False):
 
     with Cluster("CloudFormation"):
         cloudformation = Cloudformation("Stack")
-        cloudformation >> IdentityAndAccessManagementIam("Permissions") >> Codecommit("Build") >> Codebuild("Deploy") >> S3("Deploy") >> Codepipeline("Pipeline")
+        cloudformation >> IdentityAndAccessManagementIam("IAM") >> Codecommit("CodeCommit") >> Codebuild("CodeBuild") >> S3("S3") >> Codepipeline("CodePipeline")
 
     with Cluster("CodePipeline"):
         codepipeline = Codepipeline("Pipeline")
-        codepipeline >> Codecommit("Source") >> Codebuild("Build") >> Cloudformation("Deploy")
+        codepipeline >> Codecommit("CodeCommit") >> Codebuild("CodeBuild") >> Cloudformation("CloudFormation")
       
     with Cluster("Serverless Application Model"):
         sam = Cloudformation("SAM Template")
-        sam >> APIGateway("GetData") >> Lambda("GetData") >> DynamodbTable("CloudProviders")
+        sam >> APIGateway("API Gateway") >> Lambda("Lambda") >> DynamodbTable("DynamoDB")
         cloudformation >> codepipeline >> sam
         
 
