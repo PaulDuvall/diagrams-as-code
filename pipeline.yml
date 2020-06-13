@@ -187,3 +187,6 @@ Outputs:
   LambdaUrl:
     Value: !Sub https://${SiteBucket}.s3.amazonaws.com/serverless_web_apps.png
     Description: Diagram for Serverless Web Apps
+  ClusterUrl:
+    Value: !Sub https://${SiteBucket}.s3.amazonaws.com/clustered_web_services.png
+    Description: Diagram for clustered web services
