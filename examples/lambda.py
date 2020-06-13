@@ -17,7 +17,7 @@ from diagrams.aws.database import ElastiCache, RDS
 from diagrams.aws.network import ELB
 from diagrams.aws.network import Route53
 
-with Diagram("Serverless Web Apps", show=False):
+with Diagram("Serverless Web Apps", show=False, direction="TB"):
     
 
     with Cluster("CloudFormation"):
