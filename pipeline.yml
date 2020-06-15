@@ -166,7 +166,7 @@ Resources:
         Actions:
         - InputArtifacts:
           - Name: SourceArtifacts
-          Name: RunCommands
+          Name: GenerateDiagrams
           ActionTypeId:
             Category: Test
             Owner: AWS
