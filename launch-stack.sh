@@ -20,13 +20,13 @@ git clone https://github.com/PaulDuvall/diagrams-as-code.git
 
 aws s3api list-buckets --query 'Buckets[?starts_with(Name, `'$S3BUCKET'`) == `true`].[Name]' --output text | xargs -I {} aws s3 rb s3://{} --force
 
-sleep 35
-
 aws s3 mb s3://$S3BUCKET-$(aws sts get-caller-identity --output text --query 'Account')
 
 aws cloudformation delete-stack --stack-name $CFNSTACK
 
 aws cloudformation wait stack-delete-complete --stack-name $CFNSTACK
+
+sleep 45
 
 cd diagrams-as-code
 
