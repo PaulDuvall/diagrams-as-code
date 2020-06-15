@@ -14,7 +14,13 @@ pip install diagrams
 pipenv install diagrams
 pip install poetry
 sudo yum -y install graphviz
-poetry add diagrams```
+poetry add diagrams
+```
+
+```aws secretsmanager create-secret --name github/personal-access-token-2 \
+    --description "GitHub Token" \
+    --secret-string file://mycreds.json
+    ```
 
 
 
