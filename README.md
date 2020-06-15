@@ -21,6 +21,13 @@ poetry add diagrams
     --description "GitHub Token" \
     --secret-string file://mycreds.json
     ```
+    
+    
+    
+```aws secretsmanager create-secret --name github/personal-access-token-3 \
+--description "GitHub Token" \
+--secret-string "1234567890"
+```
 
 
 
