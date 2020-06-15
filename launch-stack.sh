@@ -26,11 +26,6 @@ aws cloudformation delete-stack --stack-name $CFNSTACK
 
 aws cloudformation wait stack-delete-complete --stack-name $CFNSTACK
 
-sleep 45
-
 cd diagrams-as-code
 
-aws cloudformation create-stack --stack-name $CFNSTACK --capabilities CAPABILITY_NAMED_IAM --disable-rollback --template-body file://$PIPELINEYAML --parameters
-
-
-aws cloudformation create-stack --stack-name $CFNSTACK --template-body file://$PIPELINEYAML --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name $CFNSTACK --capabilities CAPABILITY_NAMED_IAM --disable-rollback --template-body file://$PIPELINEYAML
