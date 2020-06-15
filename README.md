@@ -17,17 +17,11 @@ sudo yum -y install graphviz
 poetry add diagrams
 ```
 
-```aws secretsmanager create-secret --name github/personal-access-token-2 \
-    --description "GitHub Token" \
-    --secret-string file://mycreds.json
-```
+```aws secretsmanager create-secret --name github/personal-access-token-2 --description "GitHub Token" --secret-string file://mycreds.json```
     
     
     
-```aws secretsmanager create-secret --name github/personal-access-token-3 \
---description "GitHub Token" \
---secret-string "1234567890"
-```
+```aws secretsmanager create-secret --name github/personal-access-token-3 --description "GitHub Token" --secret-string "1234567890"```
 
 
 
