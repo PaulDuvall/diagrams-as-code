@@ -5,9 +5,7 @@ phases:
       python: 3.7
     commands:
       - python --version
-  build:
-    commands:
-      - curl -O https://bootstrap.pypa.io/get-pip.py
+      - 'curl -O https://bootstrap.pypa.io/get-pip.py'
       - python3 get-pip.py --user
       - pip install --upgrade pip
       - pip install --user aws-sam-cli
@@ -16,11 +14,13 @@ phases:
       - pipenv install diagrams
       - pip install poetry
       - yum -y install graphviz
+  build:
+    commands:
       - python examples/cluster.py
       - python examples/lambda.py
       - mkdir diagrams
       - mv ./*.png diagrams
-      - aws s3 cp --recursive --acl public-read ./diagrams s3://$S3_BUCKET
+      - 'aws s3 cp --recursive --acl public-read ./diagrams s3://$S3_BUCKET'
 artifacts:
   files:
     - '**/*'
