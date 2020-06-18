@@ -1,27 +1,12 @@
 # diagrams-as-code
 
-https://diagrams.mingrammer.com/docs/nodes/aws
+For instructions on getting this solution to run, see [Pushbutton AWS Diagrams](https://stelligent.com/2020/06/15/continuous-diagrams-as-code-for-aws/) which has an embedded [YouTube video](https://www.youtube.com/watch?v=lh6Qvl4wCt4) that walks through the steps.
 
-https://github.com/PaulDuvall/aws-encryption-workshop/wiki/0.2#install-and-configure-python-on-cloud9
+Here are some other resources:
+* https://diagrams.mingrammer.com/docs/getting-started/installation
+* https://diagrams.mingrammer.com/docs/nodes/aws
+* https://graphviz.org/doc/info/attrs.html
 
-https://diagrams.mingrammer.com/docs/getting-started/installation
-
-Create a `pyproject.toml` file.
-
-
-```pip install pipenv
-pip install diagrams
-pipenv install diagrams
-pip install poetry
-sudo yum -y install graphviz
-poetry add diagrams
-```
-
-```aws secretsmanager create-secret --name github/personal-access-token-2 --description "GitHub Token" --secret-string file://mycreds.json```
-    
-    
-    
-```aws secretsmanager create-secret --name github/personal-access-token-3 --description "GitHub Token" --secret-string "1234567890"```
 
 
 
