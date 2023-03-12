@@ -11,7 +11,7 @@ from diagrams.aws.devtools import Codedeploy
 from diagrams.aws.devtools import Codepipeline
 from diagrams.aws.management import Cloudformation
 from diagrams.aws.devtools import CommandLineInterface
-from diagrams.aws.integration.Eventbridge Eventbridge
+from diagrams.aws.integration import Eventbridge as eb
 
 with Diagram("finance-buxfer", show=False, direction="TB"):
     
@@ -26,7 +26,7 @@ with Diagram("finance-buxfer", show=False, direction="TB"):
       
     with Cluster("Serverless Application Model"):
         sam = Cloudformation("SAM Template")
-        sam >> Lambda("Lambda") >> DynamodbTable("DynamoDB") >> Eventbridge("EventBridge Rule")
+        sam >> Lambda("Lambda") >> DynamodbTable("DynamoDB") >> eb("EventBridgeRule")
         cloudformation >> codepipeline >> sam
         
 
